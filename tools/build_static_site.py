@@ -24,6 +24,7 @@ import json
 import re
 import shutil
 import sys
+from datetime import datetime
 from pathlib import Path
 
 import jinja2
@@ -173,14 +174,54 @@ def build(api_base: str, out: Path) -> list:
     config = {"mode": "browser", "keggBase": "kegg-data/", "evidenceBase": "evidence-data/"} if browser_mode else {"apiBase": api_base.rstrip("/")}
     (out / "config.js").write_text("window.KSITES_CONFIG = " + json.dumps(config) + ";\n", encoding="utf-8")
     (out / ".nojekyll").write_text("", encoding="utf-8")
-    (out / "robots.txt").write_text("User-agent: *\nDisallow: /\n", encoding="utf-8")
+    (out / "robots.txt").write_text(
+        "User-agent: *\n"
+        "Disallow: /login.html\n"
+        "Disallow: /hosted_login.html\n"
+        "Allow: /\n"
+        "Sitemap: https://shubham-kumar-13.github.io/K-sites/sitemap.xml\n",
+        encoding="utf-8",
+    )
+    (out / "google2d86ad3bf1502476.html").write_text(
+        "google-site-verification: google2d86ad3bf1502476.html", encoding="utf-8"
+    )
+    sitemap = build_sitemap()
+    (out / "sitemap.xml").write_text(sitemap, encoding="utf-8")
     (out / "404.html").write_text(
         '<!DOCTYPE html><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=index.html">'
         '<title>K-Sites</title><p>Page not found. <a href="index.html">Go to K-Sites</a>.</p>',
         encoding="utf-8",
     )
-    written += ["config.js", "static/", ".nojekyll", "robots.txt", "404.html"]
+    written += ["config.js", "static/", ".nojekyll", "robots.txt",
+                "google2d86ad3bf1502476.html", "sitemap.xml", "404.html"]
     return written
+
+
+def build_sitemap():
+    """Generate a sitemap.xml for the public GitHub Pages site."""
+    base = "https://shubham-kumar-13.github.io/K-sites"
+    pages = [
+        ("index.html", "1.00"),
+        ("help.html", "0.80"),
+        ("jobs.html", "0.60"),
+        ("results.html", "0.60"),
+        ("validation.html", "0.40"),
+    ]
+    today = datetime.now().strftime("%Y-%m-%d")
+    urls = "\n".join(
+        f"  <url>\n"
+        f"    <loc>{base}/{path}</loc>\n"
+        f"    <lastmod>{today}</lastmod>\n"
+        f"    <priority>{priority}</priority>\n"
+        f"  </url>"
+        for path, priority in pages
+    )
+    return (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        f"{urls}\n"
+        "</urlset>\n"
+    )
 
 
 def main():
