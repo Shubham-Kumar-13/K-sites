@@ -1088,6 +1088,16 @@ def _execute_analysis_job(job_id: str):
             with open(json_path, 'w') as f:
                 json.dump(pipeline_output, f, indent=2, default=str)
             
+            # Lightweight summary for fast status checks
+            statistics = pipeline_output.get('statistics', {})
+            summary = {
+                'total_genes_found': job.total_genes_found,
+                'genes_processed': len(pipeline_output.get('genes', [])),
+                'safety_distribution': statistics.get('by_safety_level', {}),
+            }
+            with open(job_results_dir / 'summary.json', 'w') as f:
+                json.dump(summary, f)
+            
             # Update job completion
             job.status = 'completed'
             job.current_step = 'Completed'
@@ -1130,7 +1140,25 @@ def get_job_status(job_id):
     if not job:
         return jsonify({'error': 'Job not found'}), 404
     
-    return jsonify(job.to_dict())
+    data = job.to_dict()
+    if job.status == 'completed' and job.results_path:
+        try:
+            results_dir = Path(job.results_path)
+            summary_path = results_dir / 'summary.json'
+            if summary_path.exists():
+                with open(summary_path, 'r') as f:
+                    summary = json.load(f)
+                data['safety_distribution'] = summary.get('safety_distribution', {})
+            else:
+                # Fallback for jobs completed before summary.json was introduced
+                json_files = list(results_dir.glob('results_*.json'))
+                if json_files:
+                    with open(json_files[0], 'r') as f:
+                        results = json.load(f)
+                    data['safety_distribution'] = (results.get('statistics', {}) or {}).get('by_safety_level', {})
+        except Exception:
+            pass
+    return jsonify(data)
 
 
 @app.route('/api/jobs')

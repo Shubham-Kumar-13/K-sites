@@ -232,6 +232,9 @@ async function checkJobStatus(jobId) {
         if (data.status === 'completed') {
             stopStatusPolling();
             stopElapsedTicker();
+            if (data.safety_distribution && data.genes_processed) {
+                renderSafetyDistFromCounts(data.safety_distribution, data.genes_processed);
+            }
             showResults(data);
             loadResults(jobId);
         } else if (data.status === 'failed') {
@@ -376,10 +379,10 @@ function addLogEntry(message) {
 // Load and Display Results
 // ============================================================================
 
-function renderSafetyDist(genes) {
+function renderSafetyDistFromCounts(counts, total) {
     const container = document.getElementById('safetyDist');
     if (!container) return;
-    if (!genes || genes.length === 0) {
+    if (!total) {
         container.innerHTML = '<span style="color:var(--ks-muted);font-size:12px;">No data</span>';
         return;
     }
@@ -390,12 +393,6 @@ function renderSafetyDist(genes) {
         { key: 'HIGH_CONCERN', label: 'High concern', color: 'var(--v-bad)' },
         { key: 'AVOID', label: 'Avoid', color: '#9e1b00' }
     ];
-    const counts = {};
-    genes.forEach(g => {
-        const level = (g.safety_recommendation || {}).safety_level || 'UNKNOWN';
-        counts[level] = (counts[level] || 0) + 1;
-    });
-    const total = genes.length;
     const cols = groups
         .filter(g => counts[g.key])
         .map((g, i) => {
@@ -408,6 +405,19 @@ function renderSafetyDist(genes) {
             </div>`;
         }).join('');
     container.innerHTML = `<div class="ks-dist2">${cols}</div>`;
+}
+
+function renderSafetyDist(genes) {
+    if (!genes || genes.length === 0) {
+        renderSafetyDistFromCounts({}, 0);
+        return;
+    }
+    const counts = {};
+    genes.forEach(g => {
+        const level = (g.safety_recommendation || {}).safety_level || 'UNKNOWN';
+        counts[level] = (counts[level] || 0) + 1;
+    });
+    renderSafetyDistFromCounts(counts, genes.length);
 }
 
 function renderLandscape(genes, cutoff) {
