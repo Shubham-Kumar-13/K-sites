@@ -1399,11 +1399,11 @@ html[data-bs-theme="dark"] .ks-hero .ks-chip {
 /* KPIs */
 .ks-kpis {
   display:grid;
-  grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,2fr);
+  grid-template-columns:minmax(0,0.8fr) minmax(0,0.8fr) minmax(0,2.4fr);
   gap:0;
 }
 .ks-kpi {
-  padding:18px 22px;
+  padding:16px 14px;
   border-left:1px solid var(--ks-line2);
   text-align:center;
 }

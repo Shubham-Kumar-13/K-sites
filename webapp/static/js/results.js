@@ -57,6 +57,21 @@ document.addEventListener('DOMContentLoaded', function() {
     watchLoaderTheme();
 });
 
+function animateNumber(el, target, duration = 900) {
+    const start = 0;
+    const startTime = performance.now();
+    function step(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        // easeOutQuart: fast start, gentle landing
+        const eased = 1 - Math.pow(1 - progress, 4);
+        const current = Math.round(start + (target - start) * eased);
+        el.textContent = current.toLocaleString();
+        if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+}
+
 /** Fill the parameter table and header from the job record (the static page ships empty). */
 function fillJobFields(job) {
     const values = {
@@ -78,7 +93,19 @@ function fillJobFields(job) {
         const value = values[key];
         if (value === undefined) return;
         document.querySelectorAll(`[data-job-field="${key}"]`).forEach(el => {
-            el.textContent = (value === null || value === '') ? '-' : value;
+            if ((value === null || value === '')) {
+                el.textContent = '-';
+                return;
+            }
+            if ((key === 'total_genes_found' || key === 'genes_processed') && !el.dataset.counted) {
+                const num = Number(value);
+                if (Number.isFinite(num)) {
+                    el.dataset.counted = '1';
+                    animateNumber(el, num);
+                    return;
+                }
+            }
+            el.textContent = value;
         });
     });
     const loadingJobId = document.getElementById('loadingJobId');
@@ -360,14 +387,14 @@ function renderSafetyDist(genes) {
         { key: 'SAFE', label: 'Safe', color: 'var(--v-safe)' },
         { key: 'CAUTION', label: 'Caution', color: 'var(--v-info)' },
         { key: 'MODERATE_CONCERN', label: 'Moderate', color: 'var(--v-warn)' },
-        { key: 'HIGH_AVOID', label: 'High / Avoid', color: 'var(--v-bad)' }
+        { key: 'HIGH_CONCERN', label: 'High concern', color: 'var(--v-bad)' },
+        { key: 'AVOID', label: 'Avoid', color: '#9e1b00' }
     ];
     const counts = {};
     genes.forEach(g => {
         const level = (g.safety_recommendation || {}).safety_level || 'UNKNOWN';
         counts[level] = (counts[level] || 0) + 1;
     });
-    counts.HIGH_AVOID = (counts.HIGH_CONCERN || 0) + (counts.AVOID || 0);
     const total = genes.length;
     const cols = groups
         .filter(g => counts[g.key])
