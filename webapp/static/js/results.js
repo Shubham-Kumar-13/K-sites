@@ -386,6 +386,7 @@ function renderSafetyDistFromCounts(counts, total) {
         container.innerHTML = '<span style="color:var(--ks-muted);font-size:12px;">No data</span>';
         return;
     }
+    container.dataset.safetyRendered = '1';
     const groups = [
         { key: 'SAFE', label: 'Safe', color: 'var(--v-safe)' },
         { key: 'CAUTION', label: 'Caution', color: 'var(--v-info)' },
@@ -615,7 +616,9 @@ async function loadResults(jobId) {
         const pleioCutoff = currentJob && typeof currentJob.max_pleiotropy === 'number' ? currentJob.max_pleiotropy : parseFloat(document.querySelector('[data-job-field="max_pleiotropy"]')?.textContent) || 5;
 
         renderGenes(resultsData.genes);
-        renderSafetyDist(resultsData.genes);
+        if (!document.getElementById('safetyDist')?.dataset.safetyRendered) {
+            renderSafetyDist(resultsData.genes);
+        }
         renderLandscape(resultsData.genes, pleioCutoff);
         renderExcluded(resultsData.excluded_genes);
         renderInsufficientData(resultsData.insufficient_data_genes);
