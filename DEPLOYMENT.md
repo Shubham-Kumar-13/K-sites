@@ -35,7 +35,7 @@ What this means in practice:
 
 ## One-time setup
 
-1. Push this repository to GitHub (for example `Shubham-Kumar-13/k-sites-test`) and make sure the
+1. Push this repository to GitHub (for example `Shubham-Kumar-13/K-sites`) and make sure the
    default branch is `main` (or `master`).
 2. In the repository: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 3. Open the **Actions** tab, choose **Deploy the K-Sites website to GitHub Pages**, and press

@@ -69,7 +69,7 @@ def session():
     s = requests.Session()
     retry = Retry(total=4, backoff_factor=1.0, status_forcelist=(429, 500, 502, 503, 504), allowed_methods=("GET",))
     s.mount("https://", HTTPAdapter(max_retries=retry))
-    s.headers["User-Agent"] = "K-Sites data builder (https://github.com/Shubham-Kumar-13/k-sites-test)"
+    s.headers["User-Agent"] = "K-Sites data builder (https://github.com/Shubham-Kumar-13/K-sites)"
     return s
 
 
