@@ -44,6 +44,10 @@
   --v-info:#56B4E9;
   --v-warn:#E69F00;
   --v-bad:#D55E00;
+
+  /* RAG / prediction callouts (always warm yellow, not brown) */
+  --ks-rag:#e6a500;
+  --ks-rag-bg:rgba(234,179,8,.08);
 }
 
 html[data-bs-theme="dark"] {
@@ -1395,7 +1399,7 @@ html[data-bs-theme="dark"] .ks-hero .ks-chip {
 /* KPIs */
 .ks-kpis {
   display:grid;
-  grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.55fr);
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,2fr);
   gap:0;
 }
 .ks-kpi {
@@ -1647,19 +1651,23 @@ html[data-bs-theme="dark"] .ks-status-pill.status-running {
 
 /* Progress bar */
 .ks-progress.ks-progress-striped i {
-  background: repeating-linear-gradient(
+  background-color: var(--ks-cyan);
+  background-image: linear-gradient(
     45deg,
-    var(--ks-cyan),
-    var(--ks-cyan) 10px,
-    #22d3ee 10px,
-    #22d3ee 20px
+    rgba(255,255,255,.22) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255,255,255,.22) 50%,
+    rgba(255,255,255,.22) 75%,
+    transparent 75%,
+    transparent
   );
-  background-size: 200% 200%;
-  animation: ks-progress-stripe 1s linear infinite;
+  background-size: 28px 28px;
+  animation: ks-progress-stripe 1.4s linear infinite;
 }
 @keyframes ks-progress-stripe {
   0% { background-position: 0 0; }
-  100% { background-position: 40px 0; }
+  100% { background-position: 28px 0; }
 }
 
 .ks-progress-meta {
@@ -2391,8 +2399,8 @@ html[data-bs-theme="dark"] .ks-status-pill.status-running {
 }
 .ks-ragbox {
   margin-top:10px;
-  border:1px solid var(--ks-warn);
-  background:rgba(240,180,41,.1);
+  border:1px solid var(--ks-rag);
+  background:var(--ks-rag-bg);
   border-radius:8px;
   padding:10px 14px;
   font-size:14px;
@@ -2433,7 +2441,7 @@ html[data-bs-theme="dark"] .ks-status-pill.status-running {
   display:inline-flex;
   align-items:center;
   gap:6px;
-  background:var(--ks-warn);
+  background:var(--ks-rag);
   color:#2a1e00;
   font:600 11.5px var(--ks-f-mono);
   padding:1px 9px;
