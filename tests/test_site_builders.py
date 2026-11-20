@@ -31,7 +31,8 @@ def site(tmp_path_factory):
 class TestStaticSite:
     def test_all_pages_are_built(self, site):
         for page in ("index.html", "jobs.html", "help.html", "results.html", "login.html",
-                     "config.js", "404.html", ".nojekyll", "robots.txt"):
+                     "config.js", "404.html", ".nojekyll", "robots.txt",
+                     "google6476bc09a78d2d3c.html", "sitemap.xml"):
             assert (site / page).exists(), page
         assert (site / "static" / "js" / "api.js").exists()
         assert (site / "static" / "js" / "main.js").exists()
@@ -69,9 +70,24 @@ class TestStaticSite:
         for name in ("index.html", "jobs.html", "results.html", "help.html"):
             assert "KSITES_PUBLIC_PAGE" not in (site / name).read_text(encoding="utf-8"), name
 
-    def test_site_asks_search_engines_not_to_index_it(self, site):
-        assert "Disallow: /" in (site / "robots.txt").read_text(encoding="utf-8")
-        assert "noindex" in (site / "index.html").read_text(encoding="utf-8")
+    def test_site_allows_search_engines_to_index_it(self, site):
+        robots = (site / "robots.txt").read_text(encoding="utf-8")
+        assert "Disallow: /\n" not in robots
+        assert "Allow: /" in robots
+        assert "Sitemap:" in robots
+        assert "noindex" not in (site / "index.html").read_text(encoding="utf-8")
+
+    def test_google_verification_file_is_present(self, site):
+        path = site / "google6476bc09a78d2d3c.html"
+        assert path.exists()
+        assert "google-site-verification:" in path.read_text(encoding="utf-8")
+
+    def test_sitemap_is_present(self, site):
+        path = site / "sitemap.xml"
+        assert path.exists()
+        text = path.read_text(encoding="utf-8")
+        assert "<urlset" in text
+        assert "index.html" in text
 
     def test_results_page_is_a_blank_shell_filled_in_by_script(self, site):
         text = (site / "results.html").read_text(encoding="utf-8")
