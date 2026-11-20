@@ -201,20 +201,21 @@ def build_sitemap():
     """Generate a sitemap.xml for the public GitHub Pages site."""
     base = "https://shubham-kumar-13.github.io/K-sites"
     pages = [
-        ("index.html", "1.00"),
-        ("help.html", "0.80"),
-        ("jobs.html", "0.60"),
-        ("results.html", "0.60"),
-        ("validation.html", "0.40"),
+        ("", "1.00", "weekly"),
+        ("help.html", "0.80", "monthly"),
+        ("jobs.html", "0.60", "monthly"),
+        ("results.html", "0.60", "monthly"),
+        ("validation.html", "0.40", "monthly"),
     ]
     today = datetime.now().strftime("%Y-%m-%d")
     urls = "\n".join(
         f"  <url>\n"
         f"    <loc>{base}/{path}</loc>\n"
         f"    <lastmod>{today}</lastmod>\n"
+        f"    <changefreq>{freq}</changefreq>\n"
         f"    <priority>{priority}</priority>\n"
         f"  </url>"
-        for path, priority in pages
+        for path, priority, freq in pages
     )
     return (
         '<?xml version="1.0" encoding="UTF-8"?>\n'

@@ -87,7 +87,8 @@ class TestStaticSite:
         assert path.exists()
         text = path.read_text(encoding="utf-8")
         assert "<urlset" in text
-        assert "index.html" in text
+        assert "https://shubham-kumar-13.github.io/K-sites/" in text
+        assert "help.html" in text
 
     def test_results_page_is_a_blank_shell_filled_in_by_script(self, site):
         text = (site / "results.html").read_text(encoding="utf-8")
