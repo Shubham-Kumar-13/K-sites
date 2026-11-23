@@ -50,30 +50,39 @@
         if (!h.id) h.id = 'val-section-' + index;
         const level = parseInt(h.tagName[1], 10);
         const indent = (level - 2) * 12;
-        return '<a href="#' + h.id + '" style="padding-left:' + indent + 'px">' + h.textContent.trim() + '</a>';
+        return '<a href="#' + h.id + '" style="margin-left:' + (6 + indent) + 'px">' + h.textContent.trim() + '</a>';
     }).join('');
 
-    // Smooth scrolling
+    // Map heading id to the actual link element in the DOM
+    const linkById = {};
+    contents.querySelectorAll('a').forEach(function (link) {
+        const id = link.getAttribute('href').slice(1);
+        linkById[id] = link;
+    });
+
+    // Smooth scrolling (getElementById because ids may start with a digit)
     contents.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
+            const id = this.getAttribute('href').slice(1);
+            const target = document.getElementById(id);
             if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
     });
 
     // Highlight active section on scroll
-    const links = contents.querySelectorAll('a');
+    function headingTop(h) {
+        return h.getBoundingClientRect().top + window.scrollY;
+    }
     function updateActive() {
-        const scrollPos = window.scrollY + 120;
+        const scrollPos = window.scrollY + 140;
         let current = null;
         headings.forEach(function (h) {
-            if (h.offsetTop <= scrollPos) current = h;
+            if (headingTop(h) <= scrollPos) current = h;
         });
-        links.forEach(function (link) { link.classList.remove('active'); });
-        if (current) {
-            const active = contents.querySelector('a[href="#' + current.id + '"]');
-            if (active) active.classList.add('active');
+        contents.querySelectorAll('a').forEach(function (link) { link.classList.remove('active'); });
+        if (current && linkById[current.id]) {
+            linkById[current.id].classList.add('active');
         }
     }
 
