@@ -393,6 +393,8 @@
     html[data-bs-theme="dark"] .ksites-header-logo.logo-dark-mode {
         display: inline-block;
     }
+    /* Keep dock above footer when scrolling to bottom */
+    .ks-dock { transition: bottom 0.15s ease-out; }
 </style>
 {% endblock %}
 
@@ -455,6 +457,30 @@
     update();
   }
   document.addEventListener('DOMContentLoaded', initScrollRail);
+
+  // Keep dock above footer when scrolling to bottom
+  function initDockAboveFooter() {
+    const dock = document.querySelector('.ks-dock');
+    const footer = document.querySelector('.ks-foot');
+    if (!dock || !footer) return;
+
+    function adjust() {
+      const footerRect = footer.getBoundingClientRect();
+      const visibleFooterHeight = Math.max(0, window.innerHeight - footerRect.top);
+      dock.style.bottom = visibleFooterHeight + 'px';
+    }
+
+    let ticking = false;
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        window.requestAnimationFrame(function () { adjust(); ticking = false; });
+        ticking = true;
+      }
+    }, { passive: true });
+    window.addEventListener('resize', adjust);
+    adjust();
+  }
+  document.addEventListener('DOMContentLoaded', initDockAboveFooter);
 
   // Smooth scroll for rail links
   document.querySelector('.ks-rail')?.addEventListener('click', function (e) {
