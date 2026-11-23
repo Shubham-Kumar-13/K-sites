@@ -179,7 +179,7 @@ function resetKingdomSelection() {
     selectedOrganism = null;
     renderKingdoms(kingdomOptions);
     document.getElementById('organismDirectSection').style.display = 'block';
-    document.getElementById('organismCategoryDivider').style.display = 'block';
+    document.getElementById('organismCategoryDivider').style.display = '';
     document.getElementById('kingdomBlock').style.display = 'block';
     hide(document.getElementById('speciesSection'));
     document.getElementById('selectedKingdomDisplay').style.display = 'none';
@@ -329,7 +329,7 @@ async function resetOrganismSelection() {
     } else {
         renderKingdoms(kingdomOptions);
         document.getElementById('organismDirectSection').style.display = 'block';
-        document.getElementById('organismCategoryDivider').style.display = 'block';
+        document.getElementById('organismCategoryDivider').style.display = '';
         document.getElementById('kingdomBlock').style.display = 'block';
         hide(document.getElementById('speciesSection'));
     }
