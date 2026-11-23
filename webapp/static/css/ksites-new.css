@@ -2419,8 +2419,8 @@ html[data-bs-theme="dark"] .ks-status-pill.status-running {
 .ks-ichip span { color:var(--ks-muted); }
 
 .ks-extra-panels {
-  background:rgba(239,68,68,0.05);
-  border:1px solid rgba(239,68,68,0.16);
+  background:rgba(55,65,81,0.05);
+  border:1px solid rgba(75,85,99,0.18);
   border-radius:10px;
   padding:10px 12px 11px;
   margin-top:12px;
@@ -2428,7 +2428,7 @@ html[data-bs-theme="dark"] .ks-status-pill.status-running {
 .ks-extra-panels-title {
   font-size:11.5px;
   font-weight:600;
-  color:#ef4444;
+  color:#4b5563;
   margin-bottom:8px;
   letter-spacing:0.25px;
 }
@@ -2438,13 +2438,13 @@ html[data-bs-theme="dark"] .ks-status-pill.status-running {
 }
 .ks-extra-panels .ks-ichip {
   background:#fff;
-  border-color:rgba(239,68,68,0.14);
+  border-color:rgba(75,85,99,0.14);
   font-size:11.5px;
   padding:6px 10px;
   line-height:1.35;
 }
-.ks-extra-panels .ks-ichip b { font-size:12px; color:#b91c1c; }
-.ks-extra-panels .ks-ichip span { color:#7f1d1d; }
+.ks-extra-panels .ks-ichip b { font-size:12px; color:#1f2937; }
+.ks-extra-panels .ks-ichip span { color:#4b5563; }
 
 .ks-warn-panel {
   background:rgba(234,179,8,.05);
