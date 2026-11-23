@@ -552,6 +552,18 @@ function renderLandscape(genes, cutoff) {
     svg.onmouseout = function (e) {
         if (e.target.closest && e.target.closest('.ks-pt') && tip) tip.hidden = true;
     };
+    svg.onclick = function (e) {
+        const t = e.target.closest && e.target.closest('.ks-pt');
+        if (!t) return;
+        const symbol = t.getAttribute('data-n');
+        const card = document.getElementById('gene-card-' + symbol);
+        if (card) {
+            e.preventDefault();
+            card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            card.classList.add('ks-highlight');
+            setTimeout(() => card.classList.remove('ks-highlight'), 1500);
+        }
+    };
 }
 
 function renderPotentialCandidates(data) {
@@ -1106,7 +1118,7 @@ function renderGenes(genes) {
         const pScore = gene.pleiotropy_score ?? 0;
         const pClass = pScore <= 2 ? 'lo' : pScore <= 5 ? 'mid' : 'hi';
         return `
-        <article class="ks-gcard">
+        <article class="ks-gcard" id="gene-card-${esc(gene.symbol)}">
             <div class="ks-rk">${index + 1}</div>
             <div class="ks-gbody">
                 <div class="ks-ghead">

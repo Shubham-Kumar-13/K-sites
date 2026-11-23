@@ -2070,6 +2070,11 @@ html[data-bs-theme="dark"] .ks-status-pill.status-running {
   overflow:hidden;
   box-shadow:var(--ks-shadow);
   margin-bottom:16px;
+  transition:box-shadow .25s,border-color .25s;
+}
+.ks-gcard.ks-highlight {
+  border-color:var(--ks-cyan);
+  box-shadow:0 0 0 4px rgba(0,188,204,.25),var(--ks-shadow);
 }
 .ks-gcard .ks-rk {
   background:var(--ks-well);
