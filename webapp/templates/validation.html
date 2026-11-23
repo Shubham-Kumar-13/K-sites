@@ -18,7 +18,9 @@
 <div class="ks-help">
     <nav class="ks-help-nav ks-panel" style="padding:16px;">
         <div style="font:600 14px var(--ks-f-sans);margin-bottom:10px;color:var(--ks-fg);">Contents</div>
-        <a href="#validation-report">Validation report</a>
+        <div id="validationContents">
+            <a href="#validation-report">Validation report</a>
+        </div>
     </nav>
 
     <div>
@@ -34,12 +36,55 @@
 
 {% block extra_js %}
 <script>
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+(function () {
+    const report = document.getElementById('validation-report');
+    const contents = document.getElementById('validationContents');
+    if (!report || !contents) return;
+
+    // Collect headings inside the report
+    const headings = Array.from(report.querySelectorAll('h2, h3, h4'));
+    if (headings.length === 0) return;
+
+    // Build the contents list
+    contents.innerHTML = headings.map(function (h, index) {
+        if (!h.id) h.id = 'val-section-' + index;
+        const level = parseInt(h.tagName[1], 10);
+        const indent = (level - 2) * 12;
+        return '<a href="#' + h.id + '" style="padding-left:' + indent + 'px">' + h.textContent.trim() + '</a>';
+    }).join('');
+
+    // Smooth scrolling
+    contents.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
     });
-});
+
+    // Highlight active section on scroll
+    const links = contents.querySelectorAll('a');
+    function updateActive() {
+        const scrollPos = window.scrollY + 120;
+        let current = null;
+        headings.forEach(function (h) {
+            if (h.offsetTop <= scrollPos) current = h;
+        });
+        links.forEach(function (link) { link.classList.remove('active'); });
+        if (current) {
+            const active = contents.querySelector('a[href="#' + current.id + '"]');
+            if (active) active.classList.add('active');
+        }
+    }
+
+    let ticking = false;
+    window.addEventListener('scroll', function () {
+        if (!ticking) {
+            window.requestAnimationFrame(function () { updateActive(); ticking = false; });
+            ticking = true;
+        }
+    }, { passive: true });
+    updateActive();
+})();
 </script>
 {% endblock %}

@@ -14,6 +14,15 @@ _CODE = re.compile(r"`([^`]+)`")
 _TABLE_SEPARATOR = re.compile(r"^\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)*\|?$")
 
 
+def _slug(text):
+    """Create a URL-friendly id from heading text (strip inline HTML)."""
+    clean = re.sub(r"<[^>]+>", "", text)
+    clean = html.unescape(clean)
+    clean = re.sub(r"[^\w\s-]", "", clean).strip().lower()
+    clean = re.sub(r"[\s-]+", "-", clean)
+    return clean or "section"
+
+
 def inline(text):
     """Escape the text and turn the inline marks into HTML."""
     codes = []
@@ -45,6 +54,7 @@ def render(markdown):
     """The HTML for a Markdown text (as a string of blocks, without <html> or <body>)."""
     lines = markdown.replace("\r\n", "\n").split("\n")
     blocks, i = [], 0
+    used_ids = set()
     while i < len(lines):
         line = lines[i]
         if not line.strip():
@@ -59,7 +69,16 @@ def render(markdown):
             blocks.append("<pre><code>" + html.escape("\n".join(code), quote=False) + "</code></pre>")
         elif re.match(r"#{1,4} ", line):
             level = len(line) - len(line.lstrip("#"))
-            blocks.append(f"<h{level}>{inline(line[level:].strip())}</h{level}>")
+            text = line[level:].strip()
+            heading_html = inline(text)
+            base_id = _slug(text)
+            slug = base_id
+            suffix = 1
+            while slug in used_ids:
+                suffix += 1
+                slug = f"{base_id}-{suffix}"
+            used_ids.add(slug)
+            blocks.append(f'<h{level} id="{slug}">{heading_html}</h{level}>')
             i += 1
         elif line.startswith("|") and i + 1 < len(lines) and _TABLE_SEPARATOR.match(lines[i + 1].strip()):
             table = [line, lines[i + 1]]
