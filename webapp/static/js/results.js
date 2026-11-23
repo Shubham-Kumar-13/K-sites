@@ -959,7 +959,7 @@ function evidencePanel(gene) {
             </div>
             <div class="ks-evgrid">${sections.join('')}${estimateSection}</div>
             ${noDataSection}
-            ${chips.length ? `<div class="ks-ichips">${chips.join('')}</div>` : ''}
+            ${chips.length ? `<div class="ks-extra-panels"><div class="ks-extra-panels-title">Extra Evidence Panels</div><div class="ks-ichips">${chips.join('')}</div></div>` : ''}
             ${systemsSection}
             ${details}
         </div>`;
