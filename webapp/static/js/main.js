@@ -123,6 +123,10 @@ function renderKingdoms(kingdoms) {
 }
 
 async function selectKingdom(kingdom) {
+    if (selectedKingdom === kingdom) {
+        resetKingdomSelection();
+        return;
+    }
     selectedKingdom = kingdom;
 
     const cards = document.querySelectorAll('.kingdom-card');
@@ -438,6 +442,10 @@ function renderGoCategories(categories) {
 }
 
 async function selectGoCategory(category) {
+    if (selectedCategory === category) {
+        resetCategorySelection();
+        return;
+    }
     selectedCategory = category;
 
     // Show loading state on the clicked card
