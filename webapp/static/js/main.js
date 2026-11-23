@@ -13,6 +13,21 @@ let goCategoryOptions = [];
 let geneCountCheckTimeout = null;
 let geneCountAbortController = null;
 
+// Smooth reveal/hide helpers
+function reveal(el) {
+    if (!el) return;
+    el.classList.remove('hiding');
+    el.classList.add('show');
+}
+function hide(el) {
+    if (!el) return;
+    if (el.classList.contains('show')) {
+        el.classList.remove('show');
+        el.classList.add('hiding');
+        setTimeout(() => el.classList.remove('hiding'), 200);
+    }
+}
+
 // DOM Ready
 document.addEventListener('DOMContentLoaded', async function() {
     // Hosted mode remembers who is logged in; use that address for the job record
@@ -142,7 +157,7 @@ async function selectKingdom(kingdom) {
     document.getElementById('organismDirectSection').style.display = 'none';
     document.getElementById('organismCategoryDivider').style.display = 'none';
     document.getElementById('kingdomBlock').style.display = 'block';
-    document.getElementById('speciesSection').style.display = 'block';
+    reveal(document.getElementById('speciesSection'));
 
     document.getElementById('speciesSearch').value = '';
     await loadSpecies(kingdom, '');
@@ -166,7 +181,7 @@ function resetKingdomSelection() {
     document.getElementById('organismDirectSection').style.display = 'block';
     document.getElementById('organismCategoryDivider').style.display = 'block';
     document.getElementById('kingdomBlock').style.display = 'block';
-    document.getElementById('speciesSection').style.display = 'none';
+    hide(document.getElementById('speciesSection'));
     document.getElementById('selectedKingdomDisplay').style.display = 'none';
     document.getElementById('selectedOrganismDisplay').style.display = 'none';
     document.getElementById('evidenceCoverageNote').style.display = 'none';
@@ -231,7 +246,7 @@ function selectOrganism(name, taxid, commonName, fromCategory = false) {
     document.getElementById('selectedOrganismName').textContent = name + (commonName ? ` (${commonName})` : '');
     document.getElementById('selectedOrganismTaxid').textContent = taxid;
     document.getElementById('selectedOrganismDisplay').style.display = '';
-    document.getElementById('speciesSection').style.display = 'none';
+    hide(document.getElementById('speciesSection'));
     document.getElementById('organismDirectSection').style.display = 'none';
     document.getElementById('organismCategoryDivider').style.display = 'none';
     document.getElementById('kingdomBlock').style.display = 'none';
@@ -307,7 +322,7 @@ async function resetOrganismSelection() {
         document.getElementById('organismDirectSection').style.display = 'none';
         document.getElementById('organismCategoryDivider').style.display = 'none';
         document.getElementById('kingdomBlock').style.display = 'block';
-        document.getElementById('speciesSection').style.display = 'block';
+        reveal(document.getElementById('speciesSection'));
         document.getElementById('speciesSearch').value = '';
         await loadSpecies(selectedKingdom, '');
         document.getElementById('speciesSearch').focus();
@@ -316,7 +331,7 @@ async function resetOrganismSelection() {
         document.getElementById('organismDirectSection').style.display = 'block';
         document.getElementById('organismCategoryDivider').style.display = 'block';
         document.getElementById('kingdomBlock').style.display = 'block';
-        document.getElementById('speciesSection').style.display = 'none';
+        hide(document.getElementById('speciesSection'));
     }
     updateDockSummary();
     checkGeneCount();
@@ -462,7 +477,7 @@ async function selectGoCategory(category) {
     document.getElementById('selectedCategoryDisplay').style.display = 'none';
     document.getElementById('goDirectInputSection').style.display = 'none';
     document.getElementById('goCategoryBlock').style.display = 'block';
-    document.getElementById('goTermsSection').style.display = 'block';
+    reveal(document.getElementById('goTermsSection'));
 
     // Clear direct input
     document.getElementById('go_term_direct').value = '';
@@ -493,7 +508,7 @@ function resetCategorySelection() {
     document.getElementById('goCategoryBlock').style.display = 'block';
     document.getElementById('selectedCategoryDisplay').style.display = 'none';
     document.getElementById('goDirectInputSection').style.display = 'block';
-    document.getElementById('goTermsSection').style.display = 'none';
+    hide(document.getElementById('goTermsSection'));
     document.getElementById('selectedGoTermDisplay').style.display = 'none';
     document.getElementById('go_term').value = '';
     document.getElementById('go_term_name').value = '';
@@ -553,7 +568,7 @@ function selectGoTerm(id, name) {
     document.getElementById('selectedGoTermId').textContent = id;
     document.getElementById('selectedGoTermName').textContent = name;
     document.getElementById('selectedGoTermDisplay').style.display = '';
-    document.getElementById('goTermsSection').style.display = 'none';
+    hide(document.getElementById('goTermsSection'));
     document.getElementById('goDirectInputSection').style.display = 'none';
     document.getElementById('goCategoryBlock').style.display = 'none';
     
@@ -570,13 +585,13 @@ function resetGoTermSelection() {
         // Came from the category/Step B flow: go back to Step B
         document.getElementById('goDirectInputSection').style.display = 'none';
         document.getElementById('goCategoryBlock').style.display = 'block';
-        document.getElementById('goTermsSection').style.display = 'block';
+        reveal(document.getElementById('goTermsSection'));
         loadGoTerms(selectedCategory, document.getElementById('goTermSearch').value);
     } else {
         // Came from direct entry: go back to the initial category + direct input view
         document.getElementById('goCategoryBlock').style.display = 'block';
         document.getElementById('goDirectInputSection').style.display = 'block';
-        document.getElementById('goTermsSection').style.display = 'none';
+        hide(document.getElementById('goTermsSection'));
     }
     updateDockSummary();
     checkGeneCount();
@@ -683,7 +698,7 @@ function initializeEventListeners() {
             selectGoTerm(value, name);
             // Reset category selection
             document.getElementById('goCategoryContainer').style.display = 'flex';
-            document.getElementById('goTermsSection').style.display = 'none';
+            hide(document.getElementById('goTermsSection'));
         }
     }, 300));
     
