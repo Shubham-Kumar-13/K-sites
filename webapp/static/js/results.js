@@ -481,7 +481,7 @@ function renderLandscape(genes, cutoff) {
         h: '<path d="M0-5.2L5 4h-10z"'
     };
 
-    const pts = valid.map(g => {
+    const pts = valid.map((g, i) => {
         const r1 = hashRandom(g.symbol + 'x');
         const r2 = hashRandom(g.symbol + 'y');
         const xJitter = (r1 - 0.5) * 0.35;
@@ -493,16 +493,14 @@ function renderLandscape(genes, cutoff) {
             rawY: g.composite_score,
             symbol: g.symbol,
             level: (g.safety_recommendation || {}).safety_level || 'UNKNOWN',
-            cls: levelClass[(g.safety_recommendation || {}).safety_level] || 'h'
+            cls: levelClass[(g.safety_recommendation || {}).safety_level] || 'h',
+            rank: i + 1   // actual result ranking, not composite-score order
         };
     });
 
-    pts.sort((a, b) => b.y - a.y);
-    pts.forEach((p, i) => { p.rank = i + 1; });
-
-    const rank1 = pts[0];
-    const passing = pts.filter(p => p.rawX <= pleio);
-    const lastPass = passing.length ? passing[passing.length - 1] : null;
+    const rank1 = pts.find(p => p.rank === 1);
+    let lastPass = null;
+    pts.forEach(p => { if (p.rawX <= pleio) lastPass = p; });
     const lastOverall = pts[pts.length - 1];
     [rank1, lastPass, lastOverall].forEach(p => { if (p) p.label = `${p.symbol} (#${p.rank})`; });
 
