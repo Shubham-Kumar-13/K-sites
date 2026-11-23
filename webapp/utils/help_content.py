@@ -305,9 +305,10 @@ ANALYTICAL_TERMS = {
 
             <h6>Optional hosted language-model API key:</h6>
             <p>You can paste an API key for one of the supported providers to let a larger language model read the
-            abstracts. The key is used only in your browser and is never sent to the K-Sites server. If the key is
-            blank or the API fails, the analysis falls back automatically to the free browser model
-            (MiniLM + keyword patterns).</p>
+            abstracts. In the hosted version of K-Sites (the default live site), the key is sent to the K-Sites backend
+            so it can call the provider on your behalf; the key is kept only for the duration of the job and is not
+            stored. If you run K-Sites entirely in your browser without a backend, the key stays in the browser instead.
+            If the key is blank or the API fails, the analysis falls back automatically to the local MiniLM model.</p>
 
             <p><strong>Supported providers:</strong></p>
             <ul>
@@ -319,7 +320,7 @@ ANALYTICAL_TERMS = {
                 <li><strong>Grok (xAI)</strong> — <code>grok-2-latest</code>.</li>
             </ul>
 
-            <p><strong>Why it helps:</strong> The default browser model matches keywords and counts how often words
+            <p><strong>Why it helps:</strong> The default local MiniLM model matches keywords and counts how often words
             like “lethal” or “viable” appear. It works for clear cases but can be misled by negation
             (for example, “the knockout was <em>not</em> lethal”), by sentences about a different gene in the same
             paper, or by conflicting reports. A hosted language model reads the abstracts as a whole, understands
@@ -345,8 +346,9 @@ ANALYTICAL_TERMS = {
                     </ul>
                 </li>
                 <li>Copy the key and paste it into the “API key (optional)” field after enabling “RAG Phenotype Prediction”.</li>
-                <li>The key is stored only in your browser for that analysis; you will need to paste it again
-                    on a different device or after clearing browser data.</li>
+                <li>The key is remembered in the browser input field for that analysis. In the hosted version it is also
+                    sent to the K-Sites backend to call the provider and is not stored there. You will need to paste it
+                    again on a different device or after clearing browser data.</li>
             </ol>
 
             <p><strong>Cost:</strong> The provider bills you directly for the tokens used. A typical K-Sites run with
@@ -683,7 +685,7 @@ FAQ_ITEMS = [
     },
     {
         "question": "Why does enabling RAG with an API key not make the analysis faster?",
-        "answer": "The API key swaps the free browser keyword model for a hosted language model. Both still have to search PubMed, retrieve abstracts and process them. The hosted model is usually slower per gene but can give more reliable severity calls because it reads context. RAG itself is the slowest part of the run; the key changes accuracy, not speed."
+        "answer": "The API key swaps the local MiniLM model for a hosted language model. Both still have to search PubMed, retrieve abstracts and process them. The hosted model is usually slower per gene but can give more reliable severity calls because it reads context. RAG itself is the slowest part of the run; the key changes accuracy, not speed."
     },
     {
         "question": "Why is a gene ranked first even though it has no measured knockout data?",

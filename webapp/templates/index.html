@@ -329,9 +329,9 @@
                                     </div>
                                     <div class="ks-formtext">
                                         Paste your own API key for the selected provider to let a larger language model read the abstracts.
-                                        This improves accuracy (better negation handling, context understanding, and conflict resolution) compared with the default free browser model.
-                                        <strong>If the field is left blank, or if the API fails, K-Sites automatically uses the default browser-based model instead.</strong>
-                                        The key is used only in this browser and is never sent to our server.
+                                        This improves accuracy (better negation handling, context understanding, and conflict resolution) compared with the default local model.
+                                        <strong>If the field is left blank, or if the API fails, K-Sites automatically uses the local MiniLM model instead.</strong>
+                                        In the hosted version of K-Sites the key is sent to the backend so it can call the provider on your behalf; it is not stored. In browser-only mode the key stays in your browser.
                                         <a href="/help#phenotype_prediction" target="_blank">How to get an API key</a>.
                                     </div>
                                 </div>
