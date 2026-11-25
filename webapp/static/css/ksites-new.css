@@ -2218,7 +2218,7 @@ html[data-bs-theme="dark"] .ks-status-pill.status-running {
   line-height:1.45;
 }
 .ks-concerns li::before {
-  content:'-';
+  content:'–';
   position:absolute;
   left:0;
   top:-1px;
