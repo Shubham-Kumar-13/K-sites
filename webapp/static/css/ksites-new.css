@@ -2190,8 +2190,8 @@ html[data-bs-theme="dark"] .ks-status-pill.status-running {
   color:var(--ks-muted);
   margin-top:12px;
   padding:8px 12px;
-  border-left:3px solid rgba(249,68,73,0.45);
-  background:rgba(249,68,73,0.03);
+  border-left:3px solid rgba(240,30,44,0.35);
+  background:rgba(240,30,44,0.025);
   border-radius:0 8px 8px 0;
 }
 .ks-concerns ul {
