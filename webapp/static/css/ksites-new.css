@@ -2223,9 +2223,9 @@ html[data-bs-theme="dark"] .ks-status-pill.status-running {
   left:0;
   top:-1px;
   color:var(--ks-muted);
-  opacity:0.85;
-  font-size:13px;
-  font-weight:700;
+  opacity:0.9;
+  font-size:14px;
+  font-weight:900;
 }
   line-height:1.45;
 }
