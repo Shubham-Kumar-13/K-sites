@@ -2221,10 +2221,10 @@ html[data-bs-theme="dark"] .ks-status-pill.status-running {
   content:'–';
   position:absolute;
   left:0;
-  top:-1px;
+  top:-2px;
   color:var(--ks-muted);
-  opacity:0.9;
-  font-size:14px;
+  opacity:0.95;
+  font-size:16px;
   font-weight:900;
 }
   line-height:1.45;
