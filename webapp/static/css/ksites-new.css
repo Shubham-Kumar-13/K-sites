@@ -2186,9 +2186,21 @@ html[data-bs-theme="dark"] .ks-status-pill.status-running {
   font-size:14px;
 }
 .ks-concerns {
-  font-size:14px;
+  font-size:13.5px;
   color:var(--ks-muted);
-  margin-top:10px;
+  margin-top:12px;
+  padding:8px 12px;
+  border-left:3px solid rgba(217,119,6,0.55);
+  background:rgba(217,119,6,0.03);
+  border-radius:0 8px 8px 0;
+}
+.ks-concerns ul {
+  margin:6px 0 0;
+  padding-left:18px;
+}
+.ks-concerns li {
+  margin-bottom:3px;
+  line-height:1.45;
 }
 .ks-mitigation {
   margin-top:10px;
