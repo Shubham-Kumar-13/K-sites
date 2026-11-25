@@ -2176,10 +2176,11 @@ html[data-bs-theme="dark"] .ks-status-pill.status-running {
 
 .ks-rec {
   margin-top:14px;
+  margin-bottom:2px;
   font-size:14.5px;
 }
 .ks-rec + ul {
-  margin:4px 0 0;
+  margin:0;
   padding-left:20px;
   font-size:14px;
 }
@@ -2189,9 +2190,12 @@ html[data-bs-theme="dark"] .ks-status-pill.status-running {
   padding-left:20px;
   font-size:14px;
 }
+.ks-mitigation li {
+  color:var(--ks-link);
+  opacity:0.75;
+}
 .ks-mitigation li::marker {
   color:var(--ks-link);
-  opacity:0.55;
 }
 .ks-concerns {
   font-size:13.5px;
